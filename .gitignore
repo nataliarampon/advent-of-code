@@ -19,3 +19,9 @@
 
 # Go workspace file
 go.work
+
+### Typescript
+
+*/**/node_modules
+package-lock.json
+*.js
