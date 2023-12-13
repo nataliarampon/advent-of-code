@@ -4,6 +4,7 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"strings"
 )
 
 func ReadTestFileContent(fileName string) string {
@@ -14,6 +15,11 @@ func ReadTestFileContent(fileName string) string {
 	}
 
 	return string(content)
+}
+
+func ReadTestFileContentInLines(fileName string) []string {
+	testData := ReadTestFileContent(fileName)
+	return strings.Split(strings.ReplaceAll(testData, "\r\n", "\n"), "\n")
 }
 
 func InitSlogLogger(level slog.Leveler) {
