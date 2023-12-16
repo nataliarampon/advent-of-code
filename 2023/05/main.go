@@ -12,12 +12,12 @@ import (
 
 func main() {
 	common.InitSlogLogger(slog.LevelWarn)
-	data := common.ReadTestFileContentInLines("test.txt")
+	data := common.ReadTestFileContentInLines("input.txt")
 
 	total := calculateResultForPart1(data)
 	fmt.Println("Result Part 1: " + fmt.Sprint(total))
 
-	totalPart2 := calculateResultForPart2(data)
+	totalPart2 := calculateResultForPart2BruteForce(data)
 	fmt.Println("Result Part 2: " + fmt.Sprint(totalPart2))
 
 }
@@ -39,7 +39,7 @@ func calculateResultForPart1(data []string) int {
 			for seed, current := range seedToNextValueMap {
 				for i := 0; i < nbLinesInMapping; i++ {
 					if current >= stepRange[i].start && current <= stepRange[i].end {
-						destValue := current + (stepRange[i].destinationStart - stepRange[i].start)
+						destValue := calculateDisplacement(current, stepRange[i].destinationStart, stepRange[i].start)
 						seedToNextValueMap[seed] = destValue
 					}
 				}
@@ -63,8 +63,54 @@ func calculateResultForPart1(data []string) int {
 	return minLocation
 }
 
-func calculateResultForPart2(data []string) int {
+func calculateResultForPart2BruteForce(data []string) int {
 	var stepRange []SeedMapping
+	var newValuesList []int
+
+	seeds := strings.Split(data[0], " ")[1:]
+	currentValueList := initCurrentValueArrayBruteForce(seeds)
+
+	processingMap := false
+	for _, line := range data[2:] {
+		fmt.Println("Line: " + line)
+		if processingMap && line != "" {
+			stepRange = calculateStepRange(line, stepRange)
+		} else {
+			for i := 0; i < len(stepRange); i++ {
+				for j, current := range currentValueList {
+					if current >= stepRange[i].start && current <= stepRange[i].end {
+						destValue := calculateDisplacement(current, stepRange[i].destinationStart, stepRange[i].start)
+						newValuesList = append(newValuesList, destValue)
+						removeArrayIndex(currentValueList, j)
+					}
+				}
+			}
+			if line == "" {
+				stepRange = nil
+				currentValueList = append(currentValueList, newValuesList...)
+				newValuesList = nil
+			}
+		}
+		processingMap = getProcessingStatus(line)
+	}
+
+	var minLocation int
+	for i, location := range currentValueList {
+		if i == 0 {
+			minLocation = location
+		}
+		if location < minLocation {
+			minLocation = location
+		}
+	}
+
+	return minLocation
+}
+
+// TODO: fix this
+func calculateResultForPart2RangeMapping(data []string) int {
+	var stepRanges []SeedMapping
+	var newRangeMappings []SeedRange
 
 	seeds := strings.Split(data[0], " ")[1:]
 	nextValueList := initSeedMapPart2(seeds)
@@ -72,47 +118,51 @@ func calculateResultForPart2(data []string) int {
 	processingMap := false
 	for _, line := range data[1:] {
 		if processingMap && line != "" {
-			stepRange = calculateStepRange(line, stepRange)
+			stepRanges = calculateStepRange(line, stepRanges)
 		} else {
-			for _, current := range nextValueList {
-				for i := 0; i < len(stepRange); i++ {
-					// three cases
-					// dest range within seed range
-					// 		seed range 1 - 4
-					// 		dest range  2 - 3 
-
-					// dest range within left part of seed range
-					// 		seed range 6 - 10
-					// 		dest range  2 - 8 
-
-					// dest range within right part of seed range
-					// 		seed range 6 - 10
-					// 		dest range  8 - 12
-
-
-					// if current >= stepRange[i].start && current <= stepRange[i].start+stepRange[i].rangeValue-1 {
-					// 	destValue := current + (stepRange[i].destinationStart - stepRange[i].start)
-					// 	nextValueList[seed] = destValue
+			for _, seedRange := range nextValueList {
+				for _, destRange := range stepRanges {
+					switch {
+					case seedRange.start >= destRange.start && seedRange.end <= destRange.end:
+						newRange := newSeedRange(calculateDisplacement(seedRange.start, destRange.destinationStart, destRange.start), seedRange.rangeValue)
+						newRangeMappings = append(newRangeMappings, *newRange)
+					case seedRange.start < destRange.start && seedRange.end > destRange.end:
+						newRange := newSeedRange(calculateDisplacement(destRange.start, destRange.destinationStart, destRange.start), destRange.end-destRange.start)
+						newRangeMappings = append(newRangeMappings, *newRange)
+					case seedRange.start < destRange.start && seedRange.end > destRange.start && seedRange.end <= destRange.end:
+						newRange := newSeedRange(calculateDisplacement(destRange.start, destRange.destinationStart, destRange.start), seedRange.end-destRange.start)
+						newRangeMappings = append(newRangeMappings, *newRange)
+					case seedRange.start >= destRange.start && seedRange.start < destRange.end && seedRange.end > destRange.end:
+						newRange := newSeedRange(calculateDisplacement(seedRange.start, destRange.destinationStart, destRange.start), destRange.end-seedRange.start)
+						newRangeMappings = append(newRangeMappings, *newRange)
 					}
+					// i know the problem here. part of seed ranges that don't fall into any destination ranges :(
+					// but i'm too lazy to fix it rn, so I'll brute force it
 				}
 			}
-			stepRange = nil
+			stepRanges = nil
+			if newRangeMappings != nil {
+				nextValueList = newRangeMappings
+			}
+			newRangeMappings = nil
 		}
-
 		processingMap = getProcessingStatus(line)
 	}
 
 	var minLocation int
-	// for i, location := range maps.Values(seedToNextValueMap) {
-	// 	if i == 0 {
-	// 		minLocation = location
-	// 	}
-	// 	if location < minLocation {
-	// 		minLocation = location
-	// 	}
-	// }
-	fmt.Println(nextValueList)
+	for i, locationRange := range nextValueList {
+		if i == 0 {
+			minLocation = locationRange.start
+		}
+		if locationRange.start < minLocation {
+			minLocation = locationRange.start
+		}
+	}
 	return minLocation
+}
+
+func calculateDisplacement(seedStart int, destinationStart int, rangeStart int) int {
+	return seedStart + (destinationStart - rangeStart)
 }
 
 func calculateStepRange(line string, stepRange []SeedMapping) []SeedMapping {
@@ -127,6 +177,17 @@ func initSeedMapPart2(seeds []string) (seedRanges []SeedRange) {
 		start, _ := strconv.Atoi(seeds[i])
 		rangeValue, _ := strconv.Atoi(seeds[i+1])
 		seedRanges = append(seedRanges, *newSeedRange(start, rangeValue))
+	}
+	return
+}
+
+func initCurrentValueArrayBruteForce(seeds []string) (currentValueList []int) {
+	seedRanges := initSeedMapPart2(seeds)
+	for i, seedRange := range seedRanges {
+		fmt.Println("Generating seed range " + strconv.Itoa(i))
+		for seed := seedRange.start; seed <= seedRange.end; seed++ {
+			currentValueList = append(currentValueList, seed)
+		}
 	}
 	return
 }
@@ -148,4 +209,9 @@ func getProcessingStatus(line string) (processingMap bool) {
 		processingMap = true
 	}
 	return
+}
+
+func removeArrayIndex(array []int, i int) []int {
+	array[i] = array[len(array)-1]
+	return array[:len(array)-1]
 }
