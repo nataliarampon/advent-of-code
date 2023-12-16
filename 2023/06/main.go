@@ -4,6 +4,7 @@ import (
 	"common"
 	"fmt"
 	"log/slog"
+	"strconv"
 	"strings"
 )
 
@@ -16,8 +17,10 @@ func main() {
 	total := calculateResultForPart1(races)
 	fmt.Println("Result Part 1: " + fmt.Sprint(total))
 
-	// total = calculateResultForPart2(data)
-	// fmt.Println("Result Part 2: " + fmt.Sprint(total))
+	race := readRacePart2(data)
+
+	total = calculateResultForPart2(race)
+	fmt.Println("Result Part 2: " + fmt.Sprint(total))
 }
 
 func readRaces(data []string) (races []Race) {
@@ -28,6 +31,13 @@ func readRaces(data []string) (races []Race) {
 		races = append(races, Race{time: raceTimes[i], record: raceDistances[i]})
 	}
 	return
+}
+
+func readRacePart2(data []string) Race {
+	raceTime, _ := strconv.Atoi(strings.Join(strings.Fields(strings.Split(data[0], ":")[1]), ""))
+	raceDistance, _ := strconv.Atoi(strings.Join(strings.Fields(strings.Split(data[1], ":")[1]), ""))
+
+	return Race{time: raceTime, record: raceDistance}
 }
 
 func calculateResultForPart1(races []Race) int {
@@ -47,6 +57,13 @@ func calculateResultForPart1(races []Race) int {
 	return total
 }
 
-func calculateResultForPart2(data []string) int {
-	panic("unimplemented")
+func calculateResultForPart2(race Race) int {
+	for j := 1; j <= race.time; j++ {
+		distance := j * (race.time - j)
+		if distance > race.record {
+			race.waysToWin++
+		}
+	}
+
+	return race.waysToWin
 }
