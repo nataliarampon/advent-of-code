@@ -4,6 +4,7 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -25,4 +26,12 @@ func ReadTestFileContentInLines(fileName string) []string {
 func InitSlogLogger(level slog.Leveler) {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: level}))
 	slog.SetDefault(logger)
+}
+
+func ConvertStringArrayToInt(array []string) (intArray []int) {
+	for _, e := range array {
+		intElement, _ := strconv.Atoi(e)
+		intArray = append(intArray, intElement)
+	}
+	return
 }
