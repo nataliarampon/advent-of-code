@@ -16,14 +16,17 @@ func main() {
 		dataInt[i] = common.ConvertStringArrayToInt(strings.Fields(line))
 	}
 
-	total := calculateResultPart1(dataInt)
+	total := calculateResult(dataInt, func(current, next int) int { return next + current })
 	fmt.Println("Result Part 1: " + fmt.Sprint(total))
 
-	total = calculateResultPart2(dataInt)
+	for i, array := range dataInt {
+		dataInt[i] = common.ReverseArray[int](array)
+	}
+	total = -calculateResult(dataInt, func(current, next int) int { return next - current })
 	fmt.Println("Result Part 2: " + fmt.Sprint(total))
 }
 
-func calculateResultPart1(data [][]int) (total int) {
+func calculateResult(data [][]int, getNext func(int, int) int) (total int) {
 
 	var differenceArrays [][]int
 
@@ -37,7 +40,7 @@ func calculateResultPart1(data [][]int) (total int) {
 
 		next := 0
 		for i := len(differenceArrays) - 1; i >= 1; i-- {
-			next = next + differenceArrays[i-1][len(differenceArrays[i-1])-1]
+			next = getNext(differenceArrays[i-1][len(differenceArrays[i-1])-1], next)
 		}
 		total += next
 	}
@@ -60,8 +63,4 @@ func isNonZero(array []int) bool {
 		}
 	}
 	return false
-}
-
-func calculateResultPart2(data [][]int) int {
-	return -1
 }
