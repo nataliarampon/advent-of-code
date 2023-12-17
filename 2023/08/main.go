@@ -4,6 +4,8 @@ import (
 	"common"
 	"fmt"
 	"log/slog"
+
+	"golang.org/x/exp/maps"
 )
 
 func main() {
@@ -58,6 +60,53 @@ func calculateResultPart1(instructions string, nodes map[string]Node) (stepCount
 	return
 }
 
-func calculateResultPart2(instructions string, nodes map[string]Node) (total int) {
-	return -1
+func calculateResultPart2(instructions string, nodes map[string]Node) (stepCount int) {
+	steps := getStartingPoints(maps.Keys(nodes))
+	loops := make([]int, len(steps))
+
+	i := 0
+	for j := 0; j < len(steps); j++ {
+		stepCount := 0
+		for steps[j][2] != 'Z' {
+			cyclingIndex := i % len(instructions)
+			instr := instructions[cyclingIndex]
+			if instr == 'L' {
+				steps[j] = nodes[steps[j]].left
+			} else {
+				steps[j] = nodes[steps[j]].right
+			}
+			stepCount++
+			i++
+		}
+		loops[j] = stepCount
+	}
+
+	return loopsLCM(loops...)
+}
+
+func getStartingPoints(nodes []string) (starts []string) {
+	for _, node := range nodes {
+		if node[2] == 'A' {
+			starts = append(starts, node)
+		}
+	}
+	return
+}
+
+func gcd(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
+func loopsLCM(numbers ...int) int {
+	result := 1
+	for i := 0; i < len(numbers); i++ {
+		result *= numbers[i] / gcd(result, numbers[i])
+	}
+
+	return result
 }
