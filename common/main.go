@@ -44,3 +44,21 @@ func ReverseArray[T constraints.Ordered](array []T) []T {
 	}
 	return array
 }
+
+func Make2DArray[T any](lines, columns int) [][]T {
+	matrix := make([][]T, lines)
+	rows := make([]T, lines*columns)
+	for i := 0; i < lines; i++ {
+		matrix[i] = rows[i*columns : (i+1)*columns]
+	}
+	return matrix
+}
+
+func TernaryOp[T any](condition bool, trueReturn T, falseReturn T) (result T) {
+	if condition {
+		result = trueReturn
+	} else {
+		result = falseReturn
+	}
+	return
+}
