@@ -62,3 +62,10 @@ func TernaryOp[T any](condition bool, trueReturn T, falseReturn T) (result T) {
 	}
 	return
 }
+
+func Abs[T constraints.Integer](number T) T {
+	if number < 0 {
+		return -number
+	}
+	return number
+}

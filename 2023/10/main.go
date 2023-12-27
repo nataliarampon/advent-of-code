@@ -4,6 +4,7 @@ import (
 	"common"
 	"fmt"
 	"log/slog"
+	"strings"
 )
 
 func main() {
@@ -11,27 +12,51 @@ func main() {
 	data := common.ReadTestFileContentInLines("input.txt")
 	data2dArray, startPostion := convertDataTo2dArray(data)
 
-	total := calculateResultPart1(data2dArray, startPostion)
+	total, _ := calculateResult(data2dArray, startPostion)
 	fmt.Println("Result Part 1: " + fmt.Sprint(total))
 
-	total = calculateResultPart2(data2dArray, startPostion)
+	_, total = calculateResult(data2dArray, startPostion)
 	fmt.Println("Result Part 2: " + fmt.Sprint(total))
 }
 
-func calculateResultPart1(data [][]rune, startPosition [2]int) int {
+func calculateResult(data [][]rune, startPosition [2]int) (int, int) {
+	const POLYGON_CORNERS_CHARS = `LJ7FS`
+
+	var polygonCorners [][2]int
+	var currentChar rune
+
 	currentPos := [2]int{startPosition[0] + 1, startPosition[1]} //start by going down
 	lastPos := startPosition
-	currentChar := '.'
 	steps := 1
+	polygonCorners = append(polygonCorners, [2]int{startPosition[0], startPosition[1]})
 
 	for currentChar != 'S' {
 		nextPos := getNextPosition(data, lastPos, currentPos)
 		currentChar = data[nextPos[0]][nextPos[1]]
 		lastPos, currentPos = currentPos, nextPos
 		steps++
+		if strings.Contains(POLYGON_CORNERS_CHARS, string(currentChar)) {
+			polygonCorners = append(polygonCorners, [2]int{currentPos[0], currentPos[1]})
+		}
 	}
 
-	return steps / 2
+	area := shoelaceFormula(polygonCorners)
+
+	return steps / 2, picksTheorem(area, steps)
+}
+
+func shoelaceFormula(polygonCorners [][2]int) (area int) {
+	for i := 0; i < len(polygonCorners); i++ {
+		if i > 0 {
+			area -= polygonCorners[i][0] * polygonCorners[i-1][1]
+		}
+		if i < len(polygonCorners)-1 {
+			area += polygonCorners[i][0] * polygonCorners[i+1][1]
+		}
+
+	}
+	area = common.Abs(area) / 2
+	return
 }
 
 func getNextPosition(data [][]rune, lastPos [2]int, currentPos [2]int) (nextPos [2]int) {
@@ -77,6 +102,6 @@ func convertDataTo2dArray(data []string) (array2D [][]rune, startPosition [2]int
 	return
 }
 
-func calculateResultPart2(data [][]rune, startPosition [2]int) int {
-	return -1
+func picksTheorem(area int, perimeterPoints int) int {
+	return area + 1 - perimeterPoints/2
 }
