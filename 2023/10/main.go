@@ -10,12 +10,12 @@ import (
 func main() {
 	common.InitSlogLogger(slog.LevelInfo)
 	data := common.ReadTestFileContentInLines("input.txt")
-	data2dArray, startPostion := convertDataTo2dArray(data)
+	data2dArray, startPosition := convertDataTo2dArray(data)
 
-	total, _ := calculateResult(data2dArray, startPostion)
+	total, _ := calculateResult(data2dArray, startPosition)
 	fmt.Println("Result Part 1: " + fmt.Sprint(total))
 
-	_, total = calculateResult(data2dArray, startPostion)
+	_, total = calculateResult(data2dArray, startPosition)
 	fmt.Println("Result Part 2: " + fmt.Sprint(total))
 }
 
