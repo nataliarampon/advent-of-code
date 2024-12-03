@@ -1,5 +1,5 @@
 from common.util import readFile
-from functools import reduce
+from collections import Counter
 
 def extractColumns(filePath):
     column1, column2 = [], []
@@ -12,4 +12,10 @@ def extractColumns(filePath):
 def partOne(filePath):
     locations1, locations2 = map(sorted, extractColumns(filePath))
     difference = sum(abs(x - y) for x, y in zip(locations1, locations2))
-    return difference 
+    return difference
+
+def partTwo(filePath):
+    locations1, locations2 = extractColumns(filePath)
+    counter = Counter(locations2)
+    similarity_score = sum(x * counter[x] for x in locations1)
+    return similarity_score
