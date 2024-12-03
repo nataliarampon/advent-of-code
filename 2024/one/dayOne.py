@@ -9,12 +9,12 @@ def extractColumns(filePath):
         column2.append(value2)
     return column1, column2
 
-def partOne(filePath):
+def partOneDay01(filePath):
     locations1, locations2 = map(sorted, extractColumns(filePath))
     difference = sum(abs(x - y) for x, y in zip(locations1, locations2))
     return difference
 
-def partTwo(filePath):
+def partTwoDay01(filePath):
     locations1, locations2 = extractColumns(filePath)
     counter = Counter(locations2)
     similarity_score = sum(x * counter[x] for x in locations1)
