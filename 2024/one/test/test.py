@@ -1,7 +1,7 @@
 import unittest
 from one.dayOne import extractColumns, partOneDay01, partTwoDay01
 
-class TestDaytOne(unittest.TestCase):
+class TestDayOne(unittest.TestCase):
     def test_extractColumns(self):
         locations1, locations2 = extractColumns('one/test/test.txt')
         self.assertEqual(locations1, [5, 3])
