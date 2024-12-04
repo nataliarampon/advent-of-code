@@ -21,7 +21,6 @@ def isReportSafe(report):
     return safety
 
 def isReportSafeWithDampening(report):
-    isAscending = None
     safety = False
     i = 0
 

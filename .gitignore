@@ -29,3 +29,6 @@ package-lock.json
 
 ## Python
 __pycache__
+
+# AoC asks for us not to commit inputs, oops
+input.txt

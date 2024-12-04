@@ -1,3 +1,4 @@
+from three.dayThree import partOneDay03, partTwoDay03
 from two.dayTwo import partOneDay02, partTwoDay02
 from one.dayOne import partOneDay01, partTwoDay01
 
@@ -7,3 +8,6 @@ if __name__ == "__main__":
 
     print(f"Day 02 Part 01: {partOneDay02('two/input.txt')}")
     print(f"Day 02 Part 02: {partTwoDay02('two/input.txt')}")
+
+    print(f"Day 03 Part 01: {partOneDay03('three/input.txt')}")
+    print(f"Day 03 Part 02: {partTwoDay03('three/input.txt')}")
