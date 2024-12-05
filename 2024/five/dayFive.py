@@ -31,7 +31,23 @@ def partOneDay05(filePath):
         current_file_index += 1
     return sum
 
+def correctUpdate(rulesBefore, rulesAfter, update):
+    while not isUpdateValid(rulesBefore, rulesAfter, update):
+        for i in range(len(update) - 1):
+            if (update[i] in rulesBefore and update[i+1] not in rulesBefore[update[i]]) or \
+                (update[i+1] in rulesAfter and update[i] not in rulesAfter[update[i+1]]):
+                update[i], update[i+1] = update[i+1], update[i]
+    return update
+
 def partTwoDay05(filePath):
     lines = readFile(filePath)
+    rulesBefore, rulesAfter, current_file_index = processRules(lines)
 
-    return 0
+    sum = 0
+    while current_file_index < len(lines):
+        update = lines[current_file_index].split(',')
+        if not isUpdateValid(rulesBefore, rulesAfter, update):
+            update = correctUpdate(rulesBefore, rulesAfter, update)
+            sum += int(update[len(update)//2])
+        current_file_index += 1
+    return sum

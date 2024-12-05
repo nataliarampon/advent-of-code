@@ -1,7 +1,7 @@
 import unittest
 
 from common.util import readFile
-from five.dayFive import isUpdateValid, partOneDay05, partTwoDay05, processRules
+from five.dayFive import correctUpdate, isUpdateValid, partOneDay05, partTwoDay05, processRules
 
 class TestDayFive(unittest.TestCase):
     def test_processRules(self):
@@ -20,12 +20,20 @@ class TestDayFive(unittest.TestCase):
         self.assertFalse(isUpdateValid(rulesBefore, rulesAfter, ['75','97','47','61','53']))
         self.assertFalse(isUpdateValid(rulesBefore, rulesAfter, ['61','13','29']))
         self.assertFalse(isUpdateValid(rulesBefore, rulesAfter, ['97','13','75','29','47']))
+    
+    def test_correctUpdate(self):
+        lines = readFile('five/test/test.txt')
+        rulesBefore, rulesAfter, _ = processRules(lines)
+
+        self.assertEqual(correctUpdate(rulesBefore, rulesAfter, ['75','97','47','61','53']), ['97','75','47','61','53'])
+        self.assertEqual(correctUpdate(rulesBefore, rulesAfter, ['61','13','29']), ['61','29','13'])
+        self.assertEqual(correctUpdate(rulesBefore, rulesAfter, ['97','13','75','29','47']), ['97','75','47','29','13'])
 
     def test_partOne(self):
         self.assertEqual(partOneDay05('five/test/test.txt'), 143)
     
     def test_partTwo(self):
-        self.assertEqual(partTwoDay05('five/test/test.txt'), 0)
+        self.assertEqual(partTwoDay05('five/test/test.txt'), 123)
 
 if __name__ == "__main__":
     unittest.main()
