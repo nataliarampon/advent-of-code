@@ -1,6 +1,6 @@
 import unittest
 
-from eight.dayEight import getAntennas, getAntinodes, partOneDay08, partTwoDay08
+from eight.dayEight import getAntennas, getAntinodes, getHarmonicAntinodes, partOneDay08, partTwoDay08
 
 class TestDayEight(unittest.TestCase):
     def test_getAntennas(self):
@@ -9,12 +9,15 @@ class TestDayEight(unittest.TestCase):
     def test_getAntinodes(self):
         self.assertEqual(getAntinodes((1,8), (2,5)), ((0,11), (3,2)))
         self.assertEqual(getAntinodes((2,5), (3,7)), ((1,3), (4,9)))
+    
+    def test_getHarmonicAntinodes(self):
+        self.assertListEqual(getHarmonicAntinodes((1,8), (2,5), ['..................', '..................', '..................', '..................']), [(1,8), (0,11), (2,5), (3,2)])
 
     def test_partOne(self):
         self.assertEqual(partOneDay08('eight/test/test.txt'), 14)
     
     def test_partTwo(self):
-        self.assertEqual(partTwoDay08('eight/test/test.txt'), 0)
+        self.assertEqual(partTwoDay08('eight/test/test.txt'), 34)
 
 if __name__ == "__main__":
     unittest.main()
