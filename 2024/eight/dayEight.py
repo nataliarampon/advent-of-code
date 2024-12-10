@@ -35,8 +35,6 @@ def partOneDay08(filePath):
     
     return len(antinodes)
 
-
-
 def getHarmonicAntinodes(antenna1, antenna2, matrix):
     diffCol = abs(antenna1[0] - antenna2[0])
     diffRow = abs(antenna1[1] - antenna2[1])
