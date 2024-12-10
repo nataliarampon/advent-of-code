@@ -1,3 +1,4 @@
+from seven.daySeven import partOneDay07, partTwoDay07
 from six.daySix import partOneDay06, partTwoDay06
 from five.dayFive import partOneDay05, partTwoDay05
 from four.dayFour import partOneDay04, partTwoDay04
@@ -21,5 +22,8 @@ if __name__ == "__main__":
     # print(f"Day 05 Part 01: {partOneDay05('five/input.txt')}")
     # print(f"Day 05 Part 02: {partTwoDay05('five/input.txt')}")
 
-    print(f"Day 06 Part 01: {len(partOneDay06('six/input.txt'))}")
-    print(f"Day 06 Part 02: {partTwoDay06('six/input.txt')}")
+    # print(f"Day 06 Part 01: {len(partOneDay06('six/input.txt'))}")
+    # print(f"Day 06 Part 02: {partTwoDay06('six/input.txt')}")
+
+    print(f"Day 07 Part 01: {partOneDay07('seven/input.txt')}")
+    # print(f"Day 07 Part 02: {partTwoDay07('seven/input.txt')}")
