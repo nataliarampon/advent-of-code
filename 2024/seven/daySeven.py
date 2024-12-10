@@ -24,7 +24,6 @@ def isCalculationPossibleThreeOps(res, runningSum, op, operands):
             isCalculationPossibleThreeOps(res, sum, '*', operands[1:]) or \
             isCalculationPossibleThreeOps(res, sum, '||', operands[1:])
 
-
 def partOneDay07(filePath):
     lines = readFile(filePath)
     calibrationResult = 0
