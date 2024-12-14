@@ -33,5 +33,5 @@ if __name__ == "__main__":
     # print(f"Day 08 Part 01: {partOneDay08('eight/input.txt')}")
     # print(f"Day 08 Part 02: {partTwoDay08('eight/input.txt')}")
 
-    print(f"Day 09 Part 01: {partOneDay09('nine/input.txt')}")
-    # print(f"Day 09 Part 02: {partTwoDay09('nine/input.txt')}")
+    # print(f"Day 09 Part 01: {partOneDay09('nine/input.txt')}")
+    print(f"Day 09 Part 02: {partTwoDay09('nine/input.txt')}")
