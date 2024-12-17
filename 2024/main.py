@@ -1,3 +1,4 @@
+from eleven.dayEleven import partOneDay11
 from ten.dayTen import partOneDay10, partTwoDay10
 from nine.dayNine import partOneDay09, partTwoDay09
 from eight.dayEight import partOneDay08, partTwoDay08
@@ -37,5 +38,8 @@ if __name__ == "__main__":
     # print(f"Day 09 Part 01: {partOneDay09('nine/input.txt')}")
     # print(f"Day 09 Part 02: {partTwoDay09('nine/input.txt')}")
 
-    print(f"Day 10 Part 01: {partOneDay10('ten/input.txt')}")
-    print(f"Day 10 Part 02: {partTwoDay10('ten/input.txt')}")
+    # print(f"Day 10 Part 01: {partOneDay10('ten/input.txt')}")
+    # print(f"Day 10 Part 02: {partTwoDay10('ten/input.txt')}")
+
+    # print(f"Day 11 Part 01: {partOneDay11('eleven/input.txt', 25)}")
+    print(f"Day 11 Part 02: {partOneDay11('eleven/input.txt', 75)}")
