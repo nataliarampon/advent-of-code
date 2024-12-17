@@ -35,6 +35,7 @@ def blinkMemoization(pebbles):
                 newState.update(Counter({memoization[pebble][0]:freq, memoization[pebble][1]: freq}))
             else:
                 newState.update(Counter({memoization[pebble][0]:2*freq}))
+    del newState[None]
     return newState
 
 def partOneDay11(filePath, n_blinks):
@@ -43,5 +44,4 @@ def partOneDay11(filePath, n_blinks):
 
     for i in range(n_blinks):
         pebbles = blinkMemoization(pebbles)
-    del pebbles[None]
     return pebbles.total()
